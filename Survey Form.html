@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Insight | Player Feedback Survey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-dark: #7c3aed;
+      --secondary: #06b6d4;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --gradient: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 5%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Main Content */
+    main {
+      margin-top: 80px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 20%);
+    }
+
+    .container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 48px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header Section */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    #title {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    #description {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .label-desc {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      margin-top: -4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Custom Select Arrow */
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 20px;
+    }
+
+    /* Radio & Checkbox Groups */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .option-card {
+      position: relative;
+    }
+
+    .option-card input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-card input:checked+.option-label {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .option-label:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .checkmark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      /* 50% for radio */
+      margin-right: 12px;
+      transition: all 0.2s;
+    }
+
+    input[type="radio"]+.option-label .checkmark {
+      border-radius: 50%;
+    }
+
+    input:checked+.option-label .checkmark {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkmark::after {
+      content: '';
+      display: none;
+      width: 6px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+    }
+
+    input[type="radio"]+.option-label .checkmark::after {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      margin: 0;
+    }
+
+    input:checked+.option-label .checkmark::after {
+      display: block;
+    }
+
+    /* Submit Button */
+    #submit {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
+    }
+
+    #submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.4);
+    }
+
+    #submit:active {
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px;
+      }
+
+      #title {
+        font-size: 2rem;
+      }
+
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">GameInsight</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#" style="color: var(--primary);">Survey</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      <header>
+        <h1 id="title">Player Feedback Survey</h1>
+        <p id="description">
+          Help us shape the future of gaming. Your feedback directly bridges the gap between players and developers,
+          enabling us to craft more immersive experiences.
+        </p>
+      </header>
+
+      <form id="survey-form">
+        <!-- Identity Section -->
+        <div class="form-group">
+          <label for="name" id="name-label">Full Name</label>
+          <input type="text" id="name" required name="name" placeholder="e.g. Alex Chen" />
+        </div>
+
+        <div class="form-group">
+          <label for="email" id="email-label">Email Address</label>
+          <input type="email" id="email" required name="email" placeholder="alex@example.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="number" id="number-label">Age</label>
+          <input type="number" id="number" max="100" min="13" required name="number" placeholder="e.g. 24" />
+        </div>
+
+        <!-- Platform Section -->
+        <div class="form-group">
+          <label for="dropdown">Primary Gaming Platform</label>
+          <select id="dropdown" name="platform">
+            <option value="" disabled selected>Select your main platform</option>
+            <option value="pc">PC (Windows/Mac/Linux)</option>
+            <option value="playstation">PlayStation 5 / 4</option>
+            <option value="xbox">Xbox Series X|S / One</option>
+            <option value="nintendo">Nintendo Switch</option>
+            <option value="mobile">Mobile (iOS/Android)</option>
+            <option value="legacy">Legacy Console</option>
+          </select>
+        </div>
+
+        <!-- Hours Section -->
+        <div class="form-group">
+          <label>Weekly Gaming Hours</label>
+          <div class="options-grid" style="grid-template-columns: 1fr;">
+            <div class="option-card">
+              <input type="radio" id="casual" name="hours" value="casual" />
+              <label class="option-label" for="casual">
+                <div class="checkmark"></div>
+                Casual (0 - 5 hours)
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="radio" id="regular" name="hours" value="regular" />
+              <label class="option-label" for="regular">
+                <div class="checkmark"></div>
+                Regular (5 - 15 hours)
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="radio" id="hardcore" name="hours" value="hardcore" />
+              <label class="option-label" for="hardcore">
+                <div class="checkmark"></div>
+                Hardcore (15+ hours)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Genres Section -->
+        <div class="form-group">
+          <label>Favorite Genres</label>
+          <span class="label-desc">Select all that apply</span>
+          <div class="options-grid">
+            <div class="option-card">
+              <input type="checkbox" id="rpg" name="genre" value="rpg" />
+              <label class="option-label" for="rpg">
+                <div class="checkmark"></div>
+                RPG
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="fps" name="genre" value="fps" />
+              <label class="option-label" for="fps">
+                <div class="checkmark"></div>
+                FPS / Shooter
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="adventure" name="genre" value="adventure" />
+              <label class="option-label" for="adventure">
+                <div class="checkmark"></div>
+                Adventure
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="moba" name="genre" value="moba" />
+              <label class="option-label" for="moba">
+                <div class="checkmark"></div>
+                MOBA
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="strategy" name="genre" value="strategy" />
+              <label class="option-label" for="strategy">
+                <div class="checkmark"></div>
+                Strategy
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="sports" name="genre" value="sports" />
+              <label class="option-label" for="sports">
+                <div class="checkmark"></div>
+                Sports / Racing
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="simulation" name="genre" value="simulation" />
+              <label class="option-label" for="simulation">
+                <div class="checkmark"></div>
+                Simulation
+              </label>
+            </div>
+            <div class="option-card">
+              <input type="checkbox" id="puzzle" name="genre" value="puzzle" />
+              <label class="option-label" for="puzzle">
+                <div class="checkmark"></div>
+                Puzzle
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="form-group">
+          <label for="comments">Community Suggestions</label>
+          <span class="label-desc">What features would you love to see in our next update?</span>
+          <textarea id="comments" name="comments" rows="5" placeholder="Share your thoughts..."></textarea>
+        </div>
+
+        <button type="submit" id="submit">Submit Feedback</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Game Insight Research. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
